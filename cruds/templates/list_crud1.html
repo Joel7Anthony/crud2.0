@@ -15,16 +15,57 @@
       crossorigin="anonymous"
     />
   </head>
-    <body>
-       <h1>TAREAS<h1>     
-        
-        <form action="">
-          <input type="text" name="title" placeholder="Escribe :">
+  <body class="bg-dark">
+    <div class="col-md-4 offset-md-4">
+      {{error}}
 
-          <textarea name="description" rows="2" placeholder="Escribe :"></textarea>
+      <!-- Create Form -->
+      <form
+        action="{% url 'create_task' %}"
+        method="POST"
+        class="card card-body mb-2"
+      >
+        {% csrf_token %}
 
-          <button>Save</button>
-        </form>    
-      
-    </body>
+        <label for="title">ACA TU TITULO:</label>
+        <input
+          type="text"
+          name="title"
+          placeholder="TITULO BONITO"
+          class="form-control mb-2"
+          autofocus
+        />
+
+        <label for="description">QUE FUE TU DESCRIPCION:</label>
+        <textarea
+          name="description"
+          id="description"
+          rows="2"
+          class="form-control mb-2"
+          placeholder="VAS A PONER..."
+        ></textarea>
+        <button class="btn btn-primary">GUARDAR</button>
+      </form>
+
+     <!-- List Tasks -->
+     {% for task in cruds %}
+     <div class="list-group">
+       <div
+         class="card card-body bg-secondary text-light d-flex flex-row justify-content-between mb-2"
+       >
+         <div>
+           <h3 class="h6">{{task.title}}</h3>
+           <p>{{task.description}}</p>
+         </div>
+         <form action="{% url 'delete_task' task.id %}" method="POST">
+           {% csrf_token %}
+           <button class="btn btn-danger">Borrar</button>
+         </form>
+       </div>
+     </div>
+     {% empty %}
+     <h1 class="text-light">No hay nada</h1>
+     {% endfor %}
+   </div>
+  </body>
 </html>
